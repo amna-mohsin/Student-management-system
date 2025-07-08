@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dreamer University Management System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fff3e0);
+    }
+
+    nav {
+      background-color: #004d40;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      color: white;
+    }
+
+    nav h2 {
+      margin: 0;
+    }
+
+    nav .nav-links a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    header {
+      background-color: #00796b;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    main {
+      padding: 2rem;
+    }
+
+    input, button, select {
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    .section {
+      display: none;
+      margin-bottom: 3rem;
+    }
+
+    .faculty-list, .student-list {
+      background-color: #ffffff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 700px;
+    }
+
+    footer {
+      background-color: #00796b;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    .faculty-list p, .student-list p {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faculty-list button, .student-list button {
+      margin-left: 1rem;
+      padding: 0.3rem 0.6rem;
+      border: none;
+      background-color: #d32f2f;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h2>Dreamer Uni</h2>
+    <div class="nav-links">
+      <a onclick="showSection('home')">Home</a>
+      <a onclick="showSection('about')">About</a>
+      <a onclick="showSection('courses')">Courses</a>
+      <a onclick="showSection('faculty')">Faculty</a>
+      <a onclick="showSection('students')">Students</a>
+    </div>
+  </nav>
+
+  <header>
+    <h1>Dreamer University Management System</h1>
+  </header>
+
+  <main>
+    <div id="home" class="section" style="display:block">
+      <h2>Welcome to Dreamer University</h2>
+      <p>Shaping the future through innovation, dedication, and quality education. Use the top menu to navigate our system.</p>
+    </div>
+
+    <div id="about" class="section">
+      <h2>About Dreamer University</h2>
+      <p>Dreamer University is committed to excellence in teaching, research, and the personal and professional development of our students. We believe in dreams becoming reality through education, innovation, and dedication.</p>
+    </div>
+
+    <div id="courses" class="section">
+      <h2>Courses Offered</h2>
+      <ul>
+        <li>Computer Science - BSCS (4 years)</li>
+        <li>Software Engineering - BSSE (4 years)</li>
+        <li>Electrical Engineering - BSEE (4 years)</li>
+        <li>Business Administration - BBA (4 years)</li>
+        <li>Data Science - BSDS (4 years)</li>
+      </ul>
+    </div>
+
+    <div id="faculty" class="section">
+      <h2>Faculty Management</h2>
+      <input type="text" id="facultyName" placeholder="Name" required />
+      <input type="text" id="facultyId" placeholder="ID" required />
+      <input type="text" id="facultyContact" placeholder="Contact (0xxxxxxxxxx or +92xxxxxxxxxx)" required />
+      <input type="email" id="facultyEmail" placeholder="Email" required />
+      <select id="facultyCourse" required>
+        <option value="">Select Course</option>
+        <option value="Computer Science">Computer Science</option>
+        <option value="Software Engineering">Software Engineering</option>
+        <option value="Electrical Engineering">Electrical Engineering</option>
+        <option value="Business Administration">Business Administration</option>
+        <option value="Data Science">Data Science</option>
+      </select>
+      <input type="number" id="facultySalary" placeholder="Salary" required />
+      <button onclick="addFaculty()">Add/Update Faculty</button>
+      <div class="faculty-list" id="facultyList"></div>
+    </div>
+
+    <div id="students" class="section">
+      <h2>Student Management</h2>
+      <input type="text" id="studentName" placeholder="Name" required />
+      <input type="text" id="studentId" placeholder="ID" required />
+      <input type="text" id="studentContact" placeholder="Contact (0xxxxxxxxxx or +92xxxxxxxxxx)" required />
+      <select id="studentCourse" required>
+        <option value="">Select Bachelor Course</option>
+        <option value="Computer Science">Computer Science</option>
+        <option value="Software Engineering">Software Engineering</option>
+        <option value="Electrical Engineering">Electrical Engineering</option>
+        <option value="Business Administration">Business Administration</option>
+        <option value="Data Science">Data Science</option>
+      </select>
+      <input type="text" id="studentYear" placeholder="Year" required />
+      <button onclick="addStudent()">Add Student</button>
+      <div class="student-list" id="studentList"></div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Dreamer University. All rights reserved.
+  </footer>
+
+  <script>
+    const facultyList = [];
+    const studentList = [];
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(div => div.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    }
+
+    function addFaculty() {
+      const name = document.getElementById('facultyName').value.trim();
+      const id = document.getElementById('facultyId').value.trim();
+      const contact = document.getElementById('facultyContact').value.trim();
+      const email = document.getElementById('facultyEmail').value.trim();
+      const course = document.getElementById('facultyCourse').value;
+      const salary = document.getElementById('facultySalary').value.trim();
+
+      if (!name || !id || !contact || !email || !course || !salary) {
+        alert("All fields are required.");
+        return;
+      }
+
+      // Contact validation (0 + 11 digits or +92 + 13 digits)
+      const contactValid = (/^0\d{10}$/.test(contact) || /^\+92\d{10}$/.test(contact));
+      if (!contactValid) {
+        alert("Faculty contact must start with 0 and be 11 digits or start with +92 and be 13 characters.");
+        return;
+      }
+
+      // Salary validation (must be positive number)
+      if (isNaN(salary) || Number(salary) <= 0) {
+        alert("Salary must be a positive number.");
+        return;
+      }
+
+      // Check for duplicate id, contact or email except updating same index
+      const existingIndex = facultyList.findIndex(f => f.id === id);
+      // If updating existing, allow replacing it but check uniqueness excluding that
+      if (existingIndex === -1) {
+        // New faculty: check for any duplicate id, contact, email in entire array
+        if (facultyList.some(f => f.id === id)) {
+          alert("Faculty ID already exists.");
+          return;
+        }
+        if (facultyList.some(f => f.contact === contact)) {
+          alert("Faculty contact number already exists.");
+          return;
+        }
+        if (facultyList.some(f => f.email.toLowerCase() === email.toLowerCase())) {
+          alert("Faculty email already exists.");
+          return;
+        }
+      } else {
+        // Updating existing - check other entries for duplicates excluding this index
+        if (facultyList.some((f, i) => i !== existingIndex && f.id === id)) {
+          alert("Faculty ID already exists.");
+          return;
+        }
+        if (facultyList.some((f, i) => i !== existingIndex && f.contact === contact)) {
+          alert("Faculty contact number already exists.");
+          return;
+        }
+        if (facultyList.some((f, i) => i !== existingIndex && f.email.toLowerCase() === email.toLowerCase())) {
+          alert("Faculty email already exists.");
+          return;
+        }
+      }
+
+      const faculty = { name, id, contact, email, course, salary };
+
+      if (existingIndex > -1) {
+        facultyList[existingIndex] = faculty;
+      } else {
+        facultyList.push(faculty);
+      }
+
+      displayFaculty();
+      clearFacultyForm();
+    }
+
+    function displayFaculty() {
+      const div = document.getElementById('facultyList');
+      div.innerHTML = facultyList.map((f, i) =>
+        `<p>
+          <strong>${f.name}</strong> (ID: ${f.id}) - Contact: ${f.contact}, Email: ${f.email}, Course: ${f.course}, Salary: ${f.salary}
+          <button onclick="deleteFaculty(${i})">Delete</button>
+        </p>`
+      ).join('');
+    }
+
+    function deleteFaculty(index) {
+      if (confirm(`Are you sure you want to delete faculty "${facultyList[index].name}"?`)) {
+        facultyList.splice(index, 1);
+        displayFaculty();
+      }
+    }
+
+    function clearFacultyForm() {
+      document.getElementById('facultyName').value = '';
+      document.getElementById('facultyId').value = '';
+      document.getElementById('facultyContact').value = '';
+      document.getElementById('facultyEmail').value = '';
+      document.getElementById('facultyCourse').value = '';
+      document.getElementById('facultySalary').value = '';
+    }
+
+    function addStudent() {
+      const name = document.getElementById('studentName').value.trim();
+      const id = document.getElementById('studentId').value.trim();
+      const contact = document.getElementById('studentContact').value.trim();
+      const course = document.getElementById('studentCourse').value;
+      const year = document.getElementById('studentYear').value.trim();
+
+      if (!name || !id || !contact || !course || !year) {
+        alert("All fields are required.");
+        return;
+      }
+
+      // Contact validation (0 + 11 digits or +92 + 13 digits)
+      const contactValid = (/^0\d{10}$/.test(contact) || /^\+92\d{10}$/.test(contact));
+      if (!contactValid) {
+        alert("Student contact must start with 0 and be 11 digits or start with +92 and be 13 characters.");
+        return;
+      }
+
+      // Check for duplicate id or contact
+      const existingIndex = studentList.findIndex(s => s.id === id);
+      if (existingIndex === -1) {
+        // New student
+        if (studentList.some(s => s.id === id)) {
+          alert("Student ID already exists.");
+          return;
+        }
+        if (studentList.some(s => s.contact === contact)) {
+          alert("Student contact number already exists.");
+          return;
+        }
+      } else {
+        // Updating existing - check excluding that index
+        if (studentList.some((s,i) => i !== existingIndex && s.id === id)) {
+          alert("Student ID already exists.");
+          return;
+        }
+        if (studentList.some((s,i) => i !== existingIndex && s.contact === contact)) {
+          alert("Student contact number already exists.");
+          return;
+        }
+      }
+
+      const student = { name, id, contact, course, year };
+
+      if (existingIndex > -1) {
+        studentList[existingIndex] = student;
+      } else {
+        studentList.push(student);
+      }
+
+      displayStudents();
+      clearStudentForm();
+    }
+
+    function displayStudents() {
+      const div = document.getElementById('studentList');
+      div.innerHTML = studentList.map((s, i) =>
+        `<p>
+          <strong>${s.name}</strong> (ID: ${s.id}) - Contact: ${s.contact}, Course: ${s.course}, Year: ${s.year}
+          <button onclick="deleteStudent(${i})">Delete</button>
+        </p>`
+      ).join('');
+    }
+
+    function deleteStudent(index) {
+      if (confirm(`Are you sure you want to delete student "${studentList[index].name}"?`)) {
+        studentList.splice(index, 1);
+        displayStudents();
+      }
+    }
+
+    function clearStudentForm() {
+      document.getElementById('studentName').value = '';
+      document.getElementById('studentId').value = '';
+      document.getElementById('studentContact').value = '';
+      document.getElementById('studentCourse').value = '';
+      document.getElementById('studentYear').value = '';
+    }
+  </script>
+</body>
+</html>
