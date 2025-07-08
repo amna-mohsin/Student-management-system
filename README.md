@@ -15,7 +15,7 @@ This is a fully responsive and creatively designed **University Student Manageme
 
 - HTML5  
 - CSS3  
-- JavaScript (Vanilla)
+- JavaScript 
 
 ## Usage
 
